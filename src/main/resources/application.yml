@@ -1,0 +1,77 @@
+ip : 127.0.0.1
+
+server:
+  port: 8686
+  context-path: /
+
+web:
+  upload-path : /users/zhanglin/soft/project/img
+  load-path : /users/zhanglin/soft/project/note
+  blogImg-path : /img/
+
+spring:
+  primary:
+      datasource:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://${ip}:3306/notedb?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
+      username: root
+      password: Zhlin@1990
+  jpa:
+    database: MYSQL
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+        hibernate:
+            dialect:org.hibernate.dialect.MySQL5Dialect
+  thymeleaf:
+    mode: HTML
+    cache: false
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${web.load-path}
+  http:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 100MB
+  data:
+    solr:
+      host: http://${ip}:8983/solr/note_core
+
+
+jedis :
+  pool :
+    host : ${ip}
+    port : 6379
+    password : Zhlin@1990
+    timeout : 60000
+    config :
+      maxTotal: 100
+      maxIdle: 10
+      maxWaitMillis : 100000
+
+myftpyun :
+  AK :
+  SK :
+  bucket : note
+  url : https://webresource.defa1688.com/
+
+github:
+  GithubID :
+  repo :
+  ClientID :
+  ClientSecret :
+
+
+security:
+  user:
+    name: admin
+    password: admin
+
+logging:
+  path: /users/zhanglin/soft/project/note/logs/
+

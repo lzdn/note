@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html layout:decorator="common/layout" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <meta content="text/html;charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <title th:text="${blogInfo.blog.blogName }"></title>
+    <!--每页单独引入的文件在head里面或者html后面写,要不然只加载母版的js，不加载单独引入的 -->
+    <link rel="stylesheet" href="/editormd/css/editormd.css" />
+    <link rel="stylesheet" href="/editormd/css/editormd.preview.min.css" />
+    <link rel="stylesheet" href="/zoomify/zoomify.min.css" >
+    <style type="text/css">
+        img{
+            width:100%;
+        }
+        #content{
+            overflow: visible;
+        }
+    </style>
+</head>
+<body>
+<div class="col-md-8" layout:fragment="content">
+    <article>
+        <h1><a href="javascript:void(0);" th:text="${blogInfo.blog.blogName }"></a></h1>
+        <div class="row">
+            <div class="col-sm-6 col-md-6">
+                <span class="glyphicon glyphicon-folder-open"></span> &nbsp;<a href="javascript:void(0);" th:text="${blogInfo.blog.blogType }"></a>
+                &nbsp;&nbsp;<span class="glyphicon glyphicon-bookmark"></span>
+                <span th:each="tag : ${blogInfo.tagList}" th:text="${tag} + ' '"></span>
+            </div>
+            <div class="col-sm-6 col-md-6">
+                <span class="glyphicon glyphicon-pencil"></span> <a href="singlepost.html#comments" th:text="${blogInfo.blog.browse }"></a>
+                &nbsp;&nbsp;<span class="glyphicon glyphicon-time"></span> <span th:text="${#dates.format(blogInfo.blog.time, 'yyyy-MM-dd HH:mm:ss')}"></span>
+            </div>
+        </div>
+        <hr/>
+        <div th:if="${blogInfo.blog.reprintedUrl } != ''">
+            <span >转载链接 </span><a th:href="@{${blogInfo.blog.reprintedUrl }}" style="cursor: pointer;" target="_blank" th:text="${blogInfo.blog.blogName }"> </a>
+        </div>
+        <img th:src="@{${blogInfo.blog.blogImg }}" class="img-responsive"/>
+        <p id="content">
+            <textarea style="display:none;" name="editormd-markdown-doc" th:text="${blogInfo.blog.content }"></textarea>
+        </p>
+        <hr/>
+    </article>
+
+    <ul class="pager">
+        <li class="previous"><a href="javascript:history.back(-1);">&larr; 返回上一页</a></li>
+    </ul>
+
+    <!--基于Github的Issues的评论-->
+    <div id="container"></div>
+    <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+    <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+    <script th:inline="javascript">
+        var gitment = new Gitment({
+            link: location.href.split("?")[0],
+            id: location.href.split("?")[0],
+            owner: [[${githubConfig.GithubID}]],
+            repo: [[${githubConfig.repo}]],
+            oauth: {
+                client_id: [[${githubConfig.ClientID}]],
+                client_secret: [[${githubConfig.ClientSecret}]],
+            },
+        })
+        gitment.render('container')
+    </script>
+</div>
+</body>
+</html>
+<script src="/editormd/lib/marked.min.js"></script>
+<script src="/editormd/lib/prettify.min.js"></script>
+<script src="/editormd/lib/raphael.min.js"></script>
+<script src="/editormd/lib/underscore.min.js"></script>
+<script src="/editormd/lib/sequence-diagram.min.js"></script>
+<script src="/editormd/lib/flowchart.min.js"></script>
+<script src="/editormd/lib/flowchart.min.js"></script>
+<script src="/editormd/lib/jquery.flowchart.min.js"></script>
+<script src="/editormd/editormd.js"></script>
+<script src="/zoomify/zoomify.min.js"></script>
+<script th:inline="javascript">
+    editormd.markdownToHTML("content", {
+        htmlDecode      : "style,script,iframe",  // you can filter tags decode
+        taskList        : true,
+        tex             : true,  // 默认不解析
+        flowChart       : true,  // 默认不解析
+        sequenceDiagram : true,  // 默认不解析
+        tocm : true,			 //菜单
+        tocContainer : "",
+        tocDropdown   : false
+    });
+
+    $('img').zoomify(); // Default settings
+    $('img').zoomify({ duration: 1000 }); // 1s duration
+</script>
