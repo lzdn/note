@@ -12,16 +12,16 @@ web:
 spring:
   primary:
       datasource:
-      driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://${ip}:3306/notedb?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
-      username: root
-      password: Zhlin@1990
+        driver-class-name: com.mysql.jdbc.Driver
+        url: jdbc:mysql://${ip}:3306/notedb?useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
+        username: root
+        password: Zhlin@1990
   jpa:
     database: MYSQL
     database-platform: org.hibernate.dialect.MySQL5Dialect
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
       naming:
         strategy: org.hibernate.cfg.ImprovedNamingStrategy
     properties:
